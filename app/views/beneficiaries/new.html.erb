@@ -1,0 +1,76 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-icon">➕</div>
+    <div>
+      <h1>Add Beneficiary</h1>
+      <p>Add a new recipient updates for payouts</p>
+    </div>
+  </div>
+
+  <div class="settings-content">
+    <%= form_with model: @beneficiary, local: true do |f| %>
+      <% if @beneficiary.errors.any? %>
+        <div class="alert alert-danger">
+          <h4><%= pluralize(@beneficiary.errors.count, "error") %> prohibited this beneficiary from being saved:</h4>
+          <ul>
+            <% @beneficiary.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="setting-group">
+        <h3>Recipient Details</h3>
+        <div class="form-group">
+          <%= f.label :name, "Beneficiary Name" %>
+          <%= f.text_field :name, class: "form-input", required: true, placeholder: "e.g. John Doe or Acme Corp" %>
+          <p class="help-text">Name as per bank records</p>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :email, "Email (Optional)" %>
+          <%= f.email_field :email, class: "form-input", placeholder: "recipient@example.com" %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :phone, "Phone (Optional)" %>
+          <%= f.text_field :phone, class: "form-input", placeholder: "+91..." %>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <h3>Bank Account Details</h3>
+        <div class="form-group">
+          <%= f.label :account_number, "Account Number" %>
+          <%= f.text_field :account_number, class: "form-input", required: true, style: "font-family: monospace;" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :ifsc_code, "IFSC Code" %>
+          <%= f.text_field :ifsc_code, class: "form-input", required: true, placeholder: "HDFC0001234", style: "text-transform: uppercase;" %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :bank_name, "Bank Name" %>
+          <%= f.text_field :bank_name, class: "form-input", required: true, placeholder: "e.g. HDFC Bank" %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :branch_name, "Branch Name (Optional)" %>
+          <%= f.text_field :branch_name, class: "form-input" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :account_type %>
+          <%= f.select :account_type, [['Savings', 'savings'], ['Current', 'current']], {}, class: "form-input" %>
+        </div>
+      </div>
+
+      <div class="setting-actions">
+        <%= f.submit "Save Beneficiary", class: "btn btn-primary" %>
+        <%= link_to "Cancel", beneficiaries_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

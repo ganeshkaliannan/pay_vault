@@ -1,0 +1,81 @@
+<div class="settings-container">
+  <div class="settings-nav">
+    <h3>Settings</h3>
+    <ul>
+      <% if @settings[:role] == 'admin' %>
+        <li><%= link_to "System Overview", "/settings", class: "nav-link" %></li>
+        <li><%= link_to "Merchants", "/settings/merchants", class: "nav-link" %></li>
+        <li><%= link_to "Security", "/settings/security", class: "nav-link" %></li>
+        <li><%= link_to "System Config", "/settings/config", class: "nav-link" %></li>
+      <% else %>
+        <li><%= link_to "General", "/settings", class: "nav-link" %></li>
+        <li><%= link_to "Security", "/settings/security", class: "nav-link" %></li>
+        <li><%= link_to "Payout Settings", "/settings/payout", class: "nav-link" %></li>
+        <li class="active"><%= link_to "Notifications", "/settings/notifications", class: "nav-link" %></li>
+        <li><%= link_to "Bank Accounts", "/settings/bank_accounts", class: "nav-link" %></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="settings-content">
+    <div class="settings-header">
+      <div class="settings-icon">🔔</div>
+      <div>
+        <h1>Notification Settings</h1>
+        <p>Control alerts, webhooks, and communication preferences</p>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Email Notifications</h3>
+      <div class="form-group">
+        <label>Notification Email</label>
+        <input type="email" class="form-input" value="<%= @settings[:notification_settings][:email] %>" />
+        <p class="help-text">Email address for receiving notifications</p>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" <%= "checked" if @settings[:notification_settings][:payment_notifications] %> />
+          Payment Notifications
+        </label>
+        <p class="help-text">Get notified when you receive a payment</p>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" <%= "checked" if @settings[:notification_settings][:payout_notifications] %> />
+          Payout Notifications
+        </label>
+        <p class="help-text">Get notified about payout status changes</p>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" <%= "checked" if @settings[:notification_settings][:low_balance_alert] %> />
+          Low Balance Alerts
+        </label>
+        <p class="help-text">Get alerted when balance falls below threshold</p>
+      </div>
+      <div class="form-group">
+        <label>Low Balance Threshold</label>
+        <input type="number" class="form-input" value="<%= (@settings[:notification_settings][:low_balance_threshold] || 10000) / 100.0 %>" step="0.01" min="0" />
+        <p class="help-text">Alert when balance falls below this amount (in USD)</p>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Notification Events</h3>
+      <div class="checkbox-grid">
+        <label class="checkbox-label"><input type="checkbox" checked /> Payment Received</label>
+        <label class="checkbox-label"><input type="checkbox" checked /> Payout Completed</label>
+        <label class="checkbox-label"><input type="checkbox" checked /> Payout Failed</label>
+        <label class="checkbox-label"><input type="checkbox" /> Daily Summary</label>
+        <label class="checkbox-label"><input type="checkbox" /> Weekly Report</label>
+        <label class="checkbox-label"><input type="checkbox" /> Monthly Statement</label>
+      </div>
+    </div>
+
+    <div class="setting-actions">
+      <button class="btn btn-primary">Save Changes</button>
+      <button class="btn btn-secondary">Cancel</button>
+    </div>
+  </div>
+</div>

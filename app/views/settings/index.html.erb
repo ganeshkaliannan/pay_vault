@@ -1,0 +1,88 @@
+<div class="settings-container">
+  <div class="settings-nav">
+    <h3>Settings</h3>
+    <ul>
+      <% if @settings[:role] == 'admin' %>
+        <li class="active"><%= link_to "System Overview", "/settings", class: "nav-link" %></li>
+        <li><%= link_to "Merchants", "/settings/merchants", class: "nav-link" %></li>
+        <li><%= link_to "Security", "/settings/security", class: "nav-link" %></li>
+        <li><%= link_to "System Config", "/settings/config", class: "nav-link" %></li>
+      <% else %>
+        <li class="active"><%= link_to "General", "/settings", class: "nav-link" %></li>
+        <li><%= link_to "Security", "/settings/security", class: "nav-link" %></li>
+        <li><%= link_to "Payout Settings", "/settings/payout", class: "nav-link" %></li>
+        <li><%= link_to "Notifications", "/settings/notifications", class: "nav-link" %></li>
+        <li><%= link_to "Bank Accounts", "/settings/bank_accounts", class: "nav-link" %></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="settings-content">
+    <div class="settings-header">
+      <div class="settings-icon">⚙️</div>
+      <div>
+        <h1><%= @settings[:role] == 'admin' ? 'System Overview' : 'General Settings' %></h1>
+        <p><%= @settings[:role] == 'admin' ? 'System-wide statistics and configuration' : 'Manage your business information and preferences' %></p>
+      </div>
+    </div>
+
+    <% if @settings[:role] == 'admin' %>
+      <!-- Admin System Overview -->
+      <div class="setting-group">
+        <h3>System Statistics</h3>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <label>Total Merchants</label>
+            <p class="stat-value"><%= @settings[:total_merchants] %></p>
+          </div>
+          <div class="stat-item">
+            <label>Total Payments</label>
+            <p class="stat-value">$<%= (@settings[:total_payments] / 100.0).round(2) %></p>
+          </div>
+          <div class="stat-item">
+            <label>Total Payouts</label>
+            <p class="stat-value">$<%= (@settings[:total_payouts] / 100.0).round(2) %></p>
+          </div>
+          <div class="stat-item">
+            <label>System Balance</label>
+            <p class="stat-value">$<%= (@settings[:system_balance] / 100.0).round(2) %></p>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <!-- Merchant Settings -->
+      <div class="setting-group">
+        <h3>Business Information</h3>
+        <div class="form-group">
+          <label>Business Name</label>
+          <input type="text" class="form-input" value="<%= @settings[:business_name] %>" />
+        </div>
+        <div class="form-group">
+          <label>Contact Email</label>
+          <input type="email" class="form-input" value="<%= @settings[:email] %>" />
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" class="form-input" value="<%= @settings[:phone] %>" />
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <input type="text" class="form-input" value="<%= @settings[:status]&.titleize %>" disabled />
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <h3>Account Balance</h3>
+        <div class="balance-display">
+          <h2>$<%= (@settings[:balance_cents] / 100.0).round(2) %></h2>
+          <p>Current available balance</p>
+        </div>
+      </div>
+
+      <div class="setting-actions">
+        <button class="btn btn-primary">Save Changes</button>
+        <button class="btn btn-secondary">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</div>

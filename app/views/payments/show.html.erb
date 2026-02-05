@@ -1,0 +1,80 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-icon">💳</div>
+    <div>
+      <h1>Payment Details #<%= @payment.id %></h1>
+      <p>Received funds details</p>
+    </div>
+    <div style="margin-left: auto;">
+      <button onclick="window.print()" class="btn btn-secondary">Print Receipt</button>
+      <%= link_to "Back to History", payments_path, class: "btn btn-secondary" %>
+    </div>
+  </div>
+
+  <div class="settings-content" style="max-width: 600px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 2.5rem; margin: 0;">
+        <%= number_to_currency(@payment.amount_cents / 100.0, unit: @payment.currency == 'INR' ? '₹' : '$') %>
+      </h1>
+      <span class="status-badge <%= @payment.status %>" style="font-size: 1rem; padding: 4px 12px; margin-top: 10px; display: inline-block;">
+        <%= @pament.status.upcase rescue @payment.status.upcase %>
+      </span>
+      <div style="margin-top: 10px; font-weight: 500; color: #4b5563;">
+        <%= @payment.transaction_type.capitalize rescue 'Credit' %>
+      </div>
+    </div>
+
+    <% if current_user.has_role?('admin') %>
+    <div class="setting-group">
+      <h3>Merchant Info</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">Company</label>
+          <div style="font-weight: 500;"><%= @payment.merchant.company_name %></div>
+        </div>
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">Email</label>
+          <div><%= @payment.merchant.email %></div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
+    <div class="setting-group">
+      <h3>Payment Details</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">Payment Method</label>
+          <div style="text-transform: uppercase;"><%= @payment.payment_method || 'N/A' %></div>
+        </div>
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">Gateway ID</label>
+          <div style="font-family: monospace; font-size: 0.9em;"><%= @payment.gateway_transaction_id || 'N/A' %></div>
+        </div>
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">Created Date</label>
+          <div><%= @payment.created_at.strftime('%b %d, %Y %H:%M:%S') %></div>
+        </div>
+        
+        <% if @payment.metadata.present? %>
+        <div style="grid-column: span 2; margin-top: 1rem; background: #f9fafb; padding: 10px; border-radius: 6px;">
+          <label style="color: #6b7280; font-size: 0.85em; display: block; margin-bottom: 5px;">Metadata / Customer Info</label>
+          <% @payment.metadata.each do |key, value| %>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 4px;">
+              <span style="color: #4b5563;"><%= key.to_s.humanize %>:</span>
+              <span style="font-family: monospace;"><%= value %></span>
+            </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <% if @payment.description.present? %>
+        <div style="grid-column: span 2; margin-top: 0.5rem;">
+          <label style="color: #6b7280; font-size: 0.85em;">Description</label>
+          <div><%= @payment.description %></div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<div class="settings-container">
+  <div class="settings-nav">
+    <h3>Categories</h3>
+    <ul>
+      <li><%= link_to "General", "/settings", class: "nav-link" %></li>
+      <li><%= link_to "Security", "/settings/security", class: "nav-link" %></li>
+      <li class="active"><%= link_to "API", "/settings/api", class: "nav-link" %></li>
+      <li><%= link_to "Notifications", "/settings/notifications", class: "nav-link" %></li>
+      <li><%= link_to "Billing", "/settings/billing", class: "nav-link" %></li>
+    </ul>
+  </div>
+
+  <div class="settings-content">
+    <div class="settings-header">
+      <div class="settings-icon">🔑</div>
+      <div>
+        <h1>API Settings</h1>
+        <p>Configure your API access and integration settings</p>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>API Keys</h3>
+      <div class="api-keys-list">
+        <div class="key-item">
+          <div class="key-info">
+            <h4>Production Key</h4>
+            <code>pk_live_5123abc789def456ghi789jkl012mno345</code>
+            <span class="key-status active">Active</span>
+          </div>
+          <div class="key-actions">
+            <button class="btn-small">Regenerate</button>
+            <button class="btn-small">Revoke</button>
+          </div>
+        </div>
+        <div class="key-item">
+          <div class="key-info">
+            <h4>Test Key</h4>
+            <code>pk_test_123abc456def789ghi789jkl012mno345</code>
+            <span class="key-status active">Active</span>
+          </div>
+          <div class="key-actions">
+            <button class="btn-small">Regenerate</button>
+            <button class="btn-small">Revoke</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary">Generate New Key</button>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Rate Limiting</h3>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" <%= 'checked' if @settings[:api_settings][:rate_limiting] %> />
+          Enable Rate Limiting
+        </label>
+      </div>
+      <div class="form-group">
+        <label>Requests per Minute</label>
+        <input type="number" class="form-input" value="<%= @settings[:api_settings][:max_requests_per_minute] %>" />
+      </div>
+      <div class="form-group">
+        <label>Burst Limit</label>
+        <input type="number" class="form-input" value="<%= @settings[:api_settings][:burst_limit] %>" />
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Webhooks</h3>
+      <div class="form-group">
+        <label>Payment Success URL</label>
+        <input type="url" class="form-input" value="<%= @settings[:api_settings][:webhook_url] %>" />
+      </div>
+      <div class="form-group">
+        <label>Payment Failed URL</label>
+        <input type="url" class="form-input" value="<%= @settings[:api_settings][:webhook_failed_url] %>" />
+      </div>
+      <div class="form-group">
+        <label>Secret Key</label>
+        <input type="password" class="form-input" value="<%= @settings[:api_settings][:webhook_secret] %>" />
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>API Documentation</h3>
+      <div class="doc-links">
+        <a href="#" class="doc-link">REST API Reference</a>
+        <a href="#" class="doc-link">Webhook Guide</a>
+        <a href="#" class="doc-link">SDK Downloads</a>
+        <a href="#" class="doc-link">Rate Limits</a>
+      </div>
+    </div>
+
+    <div class="setting-actions">
+      <button class="btn btn-primary">Save Changes</button>
+      <button class="btn btn-secondary">Cancel</button>
+    </div>
+  </div>
+</div>

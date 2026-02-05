@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  amount_cents: 1
+  currency: MyString
+  transaction_type: MyString
+  status: MyString
+  description: MyText
+  balance_before_cents: 1
+  balance_after_cents: 1
+  merchant: one
+  payment: one
+  payout: one
+  metadata: 
+
+two:
+  amount_cents: 1
+  currency: MyString
+  transaction_type: MyString
+  status: MyString
+  description: MyText
+  balance_before_cents: 1
+  balance_after_cents: 1
+  merchant: two
+  payment: two
+  payout: two
+  metadata: 

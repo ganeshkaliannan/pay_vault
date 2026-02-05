@@ -1,0 +1,81 @@
+<div class="settings-container">
+  <div class="settings-nav">
+    <h3>Settings</h3>
+    <ul>
+      <% if @settings[:role] == 'admin' %>
+        <li><%= link_to "System Overview", "/settings", class: "nav-link" %></li>
+        <li><%= link_to "Merchants", "/settings/merchants", class: "nav-link" %></li>
+        <li class="active"><%= link_to "Security", "/settings/security", class: "nav-link" %></li>
+        <li><%= link_to "System Config", "/settings/config", class: "nav-link" %></li>
+      <% else %>
+        <li><%= link_to "General", "/settings", class: "nav-link" %></li>
+        <li class="active"><%= link_to "Security", "/settings/security", class: "nav-link" %></li>
+        <li><%= link_to "Payout Settings", "/settings/payout", class: "nav-link" %></li>
+        <li><%= link_to "Notifications", "/settings/notifications", class: "nav-link" %></li>
+        <li><%= link_to "Bank Accounts", "/settings/bank_accounts", class: "nav-link" %></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="settings-content">
+    <div class="settings-header">
+      <div class="settings-icon">🔒</div>
+      <div>
+        <h1>Security Settings</h1>
+        <p>Manage your account security and access controls</p>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Password</h3>
+      <div class="form-group">
+        <label>Current Password</label>
+        <input type="password" class="form-input" placeholder="Enter current password" />
+      </div>
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" class="form-input" placeholder="Enter new password" />
+      </div>
+      <div class="form-group">
+        <label>Confirm New Password</label>
+        <input type="password" class="form-input" placeholder="Confirm new password" />
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Two-Factor Authentication</h3>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" <%= 'checked' if @settings[:security_settings][:two_factor_auth] %> />
+          Enable Two-Factor Authentication (Coming Soon)
+        </label>
+        <p class="help-text">Add an extra layer of security to your account</p>
+      </div>
+    </div>
+
+    <% if @settings[:role] != 'admin' %>
+      <div class="setting-group">
+        <h3>Login Activity</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Last Login</label>
+            <p><%= @settings[:security_settings][:last_login]&.strftime('%B %d, %Y at %I:%M %p') || 'Never' %></p>
+          </div>
+          <div class="info-item">
+            <label>Total Sign-ins</label>
+            <p><%= @settings[:security_settings][:sign_in_count] || 0 %></p>
+          </div>
+          <div class="info-item">
+            <label>Last IP Address</label>
+            <p><%= @settings[:security_settings][:last_sign_in_ip] || 'N/A' %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="setting-actions">
+      <button class="btn btn-primary">Save Changes</button>
+      <button class="btn btn-secondary">Cancel</button>
+    </div>
+  </div>
+</div>

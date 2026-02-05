@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account_holder_name: MyString
+  account_number: MyString
+  routing_number: MyString
+  bank_name: MyString
+  bank_code: MyString
+  account_type: MyString
+  currency: MyString
+  is_verified: false
+  is_primary: false
+  accountable: one
+  accountable_type: Accountable
+  metadata: 
+
+two:
+  account_holder_name: MyString
+  account_number: MyString
+  routing_number: MyString
+  bank_name: MyString
+  bank_code: MyString
+  account_type: MyString
+  currency: MyString
+  is_verified: false
+  is_primary: false
+  accountable: two
+  accountable_type: Accountable
+  metadata: 

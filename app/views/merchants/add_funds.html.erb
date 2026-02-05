@@ -1,0 +1,35 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-icon">💰</div>
+    <div>
+      <h1>Add Funds</h1>
+      <p>Manually load balance for <%= @merchant.company_name %></p>
+    </div>
+  </div>
+
+  <div class="settings-content">
+    <div class="stat-card" style="max-width: 400px; margin-bottom: 2rem;">
+      <h3>Current Balance</h3>
+      <div class="stat-value">$<%= (@merchant.balance_cents / 100.0).round(2) %></div>
+      <div class="stat-change neutral">
+        <%= @merchant.currency %>
+      </div>
+    </div>
+
+    <%= form_with url: fund_merchant_path(@merchant), method: :post, local: true do |f| %>
+      <div class="setting-group">
+        <h3>Load Details</h3>
+        <div class="form-group">
+          <%= f.label :amount, "Amount to Add" %>
+          <%= f.number_field :amount, step: "0.01", min: "0.01", class: "form-input", required: true, placeholder: "0.00" %>
+          <p class="help-text">Enter the amount received via offline bank transfer</p>
+        </div>
+      </div>
+
+      <div class="setting-actions">
+        <%= f.submit "Add Funds", class: "btn btn-primary", data: { confirm: "Are you sure you want to add these funds? This will update the merchant's balance immediately." } %>
+        <%= link_to "Cancel", merchants_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

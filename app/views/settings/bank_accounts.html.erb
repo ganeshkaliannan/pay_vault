@@ -1,0 +1,117 @@
+<div class="settings-container">
+  <div class="settings-nav">
+    <h3>Settings</h3>
+    <ul>
+      <% if @settings[:role] == 'admin' %>
+        <li><%= link_to "System Overview", "/settings", class: "nav-link" %></li>
+        <li><%= link_to "Merchants", "/settings/merchants", class: "nav-link" %></li>
+        <li><%= link_to "Security", "/settings/security", class: "nav-link" %></li>
+        <li><%= link_to "System Config", "/settings/config", class: "nav-link" %></li>
+      <% else %>
+        <li><%= link_to "General", "/settings", class: "nav-link" %></li>
+        <li><%= link_to "Security", "/settings/security", class: "nav-link" %></li>
+        <li><%= link_to "Payout Settings", "/settings/payout", class: "nav-link" %></li>
+        <li><%= link_to "Notifications", "/settings/notifications", class: "nav-link" %></li>
+        <li class="active"><%= link_to "Bank Accounts", "/settings/bank_accounts", class: "nav-link" %></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="settings-content">
+    <div class="settings-header">
+      <div class="settings-icon">🏦</div>
+      <div>
+        <h1>Bank Accounts</h1>
+        <p>Manage your bank accounts for payouts</p>
+      </div>
+    </div>
+
+    <% if @bank_accounts&.any? %>
+      <div class="setting-group">
+        <h3>Your Bank Accounts</h3>
+        <% @bank_accounts.each do |account| %>
+          <div class="bank-account-card">
+            <div class="bank-info">
+              <h4><%= account.bank_name %></h4>
+              <p><strong>Account Holder:</strong> <%= account.account_holder_name %></p>
+              <p><strong>Account Number:</strong> •••• <%= account.account_number.last(4) %></p>
+              <p><strong>Bank Code:</strong> <%= account.bank_code %></p>
+              <p><strong>Routing Number:</strong> <%= account.routing_number %></p>
+              <p><strong>Account Type:</strong> <%= account.account_type&.titleize %></p>
+              
+              <div class="account-badges">
+                <% if account.is_primary %>
+                  <span class="badge primary">Primary</span>
+                <% end %>
+                <span class="badge <%= account.is_verified ? 'success' : 'warning' %>">
+                  <%= account.is_verified ? '✓ Verified' : 'Pending Verification' %>
+                </span>
+              </div>
+            </div>
+            
+            <div class="account-actions">
+              <% unless account.is_primary %>
+                <%= link_to "Set as Primary", "#", class: "btn btn-sm btn-secondary" %>
+              <% end %>
+              <%= link_to "Edit", "#", class: "btn btn-sm btn-secondary" %>
+              <%= link_to "Delete", "#", class: "btn btn-sm btn-danger", data: { confirm: "Are you sure?" } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty-state">
+        <div class="empty-icon">🏦</div>
+        <h3>No Bank Accounts</h3>
+        <p>Add a bank account to receive payouts</p>
+      </div>
+    <% end %>
+
+    <div class="setting-group">
+      <h3>Add New Bank Account</h3>
+      <div class="form-group">
+        <label>Account Holder Name</label>
+        <input type="text" class="form-input" placeholder="Enter account holder name" />
+      </div>
+      <div class="form-group">
+        <label>Bank Name</label>
+        <input type="text" class="form-input" placeholder="Enter bank name" />
+      </div>
+      <div class="form-group">
+        <label>Account Number</label>
+        <input type="text" class="form-input" placeholder="Enter account number" />
+      </div>
+      <div class="form-group">
+        <label>Confirm Account Number</label>
+        <input type="text" class="form-input" placeholder="Re-enter account number" />
+      </div>
+      <div class="form-group">
+        <label>Bank Code</label>
+        <input type="text" class="form-input" placeholder="Enter bank code (e.g., CHASE)" />
+      </div>
+      <div class="form-group">
+        <label>Routing Number</label>
+        <input type="text" class="form-input" placeholder="Enter routing number" maxlength="9" />
+        <p class="help-text">9-digit routing number for US banks</p>
+      </div>
+      <div class="form-group">
+        <label>Account Type</label>
+        <select class="form-input">
+          <option value="savings">Savings</option>
+          <option value="current">Current/Checking</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" />
+          Set as primary account
+        </label>
+      </div>
+    </div>
+
+    <div class="setting-actions">
+      <button class="btn btn-primary">Add Bank Account</button>
+      <button class="btn btn-secondary">Cancel</button>
+    </div>
+  </div>
+</div>

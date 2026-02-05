@@ -1,0 +1,79 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-icon">✏️</div>
+    <div>
+      <h1>Edit Beneficiary</h1>
+      <p>Update details for <%= @beneficiary.name %></p>
+    </div>
+  </div>
+
+  <div class="settings-content">
+    <%= form_with model: @beneficiary, local: true do |f| %>
+      <% if @beneficiary.errors.any? %>
+        <div class="alert alert-danger">
+          <h4><%= pluralize(@beneficiary.errors.count, "error") %> prohibited this beneficiary from being saved:</h4>
+          <ul>
+            <% @beneficiary.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="setting-group">
+        <h3>Recipient Details</h3>
+        <div class="form-group">
+          <%= f.label :name, "Beneficiary Name" %>
+          <%= f.text_field :name, class: "form-input", required: true %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :email, "Email (Optional)" %>
+          <%= f.email_field :email, class: "form-input" %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :phone, "Phone (Optional)" %>
+          <%= f.text_field :phone, class: "form-input" %>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <h3>Bank Account Details</h3>
+        <div class="info-notice" style="background: #fff3cd; color: #856404; padding: 10px; border-radius: 4px; margin-bottom: 20px; font-size: 0.9em;">
+          ⚠️ Changing account details will require re-verification.
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :account_number, "Account Number" %>
+          <%= f.text_field :account_number, class: "form-input", required: true, style: "font-family: monospace;" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :ifsc_code, "IFSC Code" %>
+          <%= f.text_field :ifsc_code, class: "form-input", required: true, style: "text-transform: uppercase;" %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :bank_name, "Bank Name" %>
+          <%= f.text_field :bank_name, class: "form-input", required: true %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :branch_name, "Branch Name" %>
+          <%= f.text_field :branch_name, class: "form-input" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :account_type %>
+          <%= f.select :account_type, [['Savings', 'savings'], ['Current', 'current']], {}, class: "form-input" %>
+        </div>
+      </div>
+
+      <div class="setting-actions">
+        <%= f.submit "Update Beneficiary", class: "btn btn-primary" %>
+        <%= link_to "Cancel", beneficiaries_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

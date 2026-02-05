@@ -1,0 +1,72 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-icon">📄</div>
+    <div>
+      <h1>Payout Receipt #<%= @payout.id %></h1>
+      <p>Transaction details</p>
+    </div>
+    <div style="margin-left: auto;">
+      <button onclick="window.print()" class="btn btn-secondary">Print Receipt</button>
+      <%= link_to "Back to History", payouts_path, class: "btn btn-secondary" %>
+    </div>
+  </div>
+
+  <div class="settings-content" style="max-width: 600px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 2.5rem; margin: 0;">
+        <%= number_to_currency(@payout.amount_cents / 100.0, unit: @payout.currency == 'INR' ? '₹' : '$') %>
+      </h1>
+      <span class="status-badge <%= @payout.status %>" style="font-size: 1rem; padding: 4px 12px; margin-top: 10px; display: inline-block;">
+        <%= @payout.status.upcase %>
+      </span>
+    </div>
+
+    <div class="setting-group">
+      <h3>Beneficiary Details</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">Name</label>
+          <div style="font-weight: 500;"><%= @payout.beneficiary&.name %></div>
+        </div>
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">Bank Name</label>
+          <div><%= @payout.beneficiary&.bank_name %></div>
+        </div>
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">Account Number</label>
+          <div style="font-family: monospace;"><%= @payout.beneficiary&.account_number %></div>
+        </div>
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">IFSC Code</label>
+          <div style="font-family: monospace;"><%= @payout.beneficiary&.ifsc_code %></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Transaction Info</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">Payout Method</label>
+          <div style="text-transform: uppercase;"><%= @payout.payout_method %></div>
+        </div>
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">Request Date</label>
+          <div><%= @payout.created_at.strftime('%b %d, %Y %H:%M:%S') %></div>
+        </div>
+        <% if @payout.completed_at %>
+        <div>
+          <label style="color: #6b7280; font-size: 0.85em;">Processed Date</label>
+          <div><%= @payout.completed_at.strftime('%b %d, %Y %H:%M:%S') %></div>
+        </div>
+        <% end %>
+        <% if @payout.description.present? %>
+        <div style="grid-column: span 2;">
+          <label style="color: #6b7280; font-size: 0.85em;">Remarks</label>
+          <div><%= @payout.description %></div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

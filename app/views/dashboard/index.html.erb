@@ -1,0 +1,155 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-icon">📊</div>
+    <div>
+      <h1>PayVault Dashboard</h1>
+      <p>Real-time payment insights and analytics</p>
+    </div>
+  </div>
+
+  <!-- Key Metrics Overview -->
+  <div class="stats-cards">
+    <% if @stats[:role] == 'admin' %>
+      <!-- Admin Stats -->
+      <div class="stat-card large">
+        <h3>Total Revenue</h3>
+        <p class="stat-value">$<%= (@stats[:total_revenue] / 100.0).round(2) %></p>
+        <span class="stat-change">All completed payments</span>
+      </div>
+      <div class="stat-card">
+        <h3>Total Payments</h3>
+        <p class="stat-value"><%= @stats[:total_payments] %></p>
+        <span class="stat-change">Across all merchants</span>
+      </div>
+      <div class="stat-card">
+        <h3>Active Merchants</h3>
+        <p class="stat-value"><%= @stats[:active_merchants] %></p>
+        <span class="stat-change">Out of <%= @stats[:total_merchants] %> total</span>
+      </div>
+      <div class="stat-card">
+        <h3>System Balance</h3>
+        <p class="stat-value">$<%= (@stats[:system_balance] / 100.0).round(2) %></p>
+        <span class="stat-change">Total merchant balances</span>
+      </div>
+    <% else %>
+      <!-- Merchant Stats -->
+      <div class="stat-card large">
+        <h3>Available Balance</h3>
+        <p class="stat-value">$<%= (@stats[:balance] / 100.0).round(2) %></p>
+        <span class="stat-change">Ready for payout</span>
+      </div>
+      <div class="stat-card">
+        <h3>Total Revenue</h3>
+        <p class="stat-value">$<%= (@stats[:total_revenue] / 100.0).round(2) %></p>
+        <span class="stat-change"><%= @stats[:completed_payments] %> completed</span>
+      </div>
+      <div class="stat-card">
+        <h3>Total Payments</h3>
+        <p class="stat-value"><%= @stats[:total_payments] %></p>
+        <span class="stat-change"><%= @stats[:pending_payments] %> pending</span>
+      </div>
+      <div class="stat-card">
+        <h3>Total Payouts</h3>
+        <p class="stat-value">$<%= (@stats[:total_payouts] / 100.0).round(2) %></p>
+        <span class="stat-change"><%= @stats[:pending_payouts] %> pending</span>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-section">
+    <div class="chart-card">
+      <h3>Revenue Trend</h3>
+      <div class="chart-placeholder">
+        <div class="chart-bar" style="height: 60%"></div>
+        <div class="chart-bar" style="height: 80%"></div>
+        <div class="chart-bar" style="height: 45%"></div>
+        <div class="chart-bar" style="height: 90%"></div>
+        <div class="chart-bar" style="height: 70%"></div>
+        <div class="chart-bar" style="height: 85%"></div>
+      </div>
+      <div class="chart-labels">
+        <span>Jan</span>
+        <span>Feb</span>
+        <span>Mar</span>
+        <span>Apr</span>
+        <span>May</span>
+        <span>Jun</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="data-table">
+    <div class="table-header">
+      <h2>Recent Transactions</h2>
+      <div class="table-actions">
+        <%= link_to "View All", "/transactions", class: "btn btn-primary" %>
+        <%= link_to "Export", "/settings", class: "btn btn-secondary" %>
+      </div>
+    </div>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Customer</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Gateway</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>#1234</td>
+          <td>John Doe</td>
+          <td>$250.00</td>
+          <td><span class="status-badge completed">Completed</span></td>
+          <td>Stripe</td>
+          <td>2024-01-15</td>
+        </tr>
+        <tr>
+          <td>#1235</td>
+          <td>Jane Smith</td>
+          <td>$1,250.50</td>
+          <td><span class="status-badge pending">Pending</span></td>
+          <td>Square</td>
+          <td>2024-01-14</td>
+        </tr>
+        <tr>
+          <td>#1236</td>
+          <td>Bob Johnson</td>
+          <td>$500.00</td>
+          <td><span class="status-badge completed">Completed</span></td>
+          <td>PayPal</td>
+          <td>2024-01-13</td>
+        </tr>
+        <tr>
+          <td>#1237</td>
+          <td>Alice Brown</td>
+          <td>$750.25</td>
+          <td><span class="status-badge failed">Failed</span></td>
+          <td>Stripe</td>
+          <td>2024-01-12</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <h3>Quick Actions</h3>
+    <div class="action-buttons">
+      <% if @user.has_role?('admin') %>
+        <%= link_to "Manage Merchants", "/settings", class: "btn btn-primary" %>
+        <%= link_to "System Settings", "/settings", class: "btn btn-secondary" %>
+      <% end %>
+      
+      <% if @user.has_role?('merchant') %>
+        <%= link_to "Request Payout", "/settings/payout", class: "btn btn-primary" %>
+        <%= link_to "View Analytics", "/settings", class: "btn btn-secondary" %>
+      <% end %>
+    </div>
+  </div>
+</div>

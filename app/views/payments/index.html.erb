@@ -1,0 +1,71 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-icon">💳</div>
+    <div>
+      <h1>Payments</h1>
+      <p>Manage and track all payment transactions</p>
+    </div>
+  </div>
+
+  <div class="data-table">
+      <div class="table-header">
+        <h2>All Payments (<%= @payments.total_count %>)</h2>
+        <div class="table-actions">
+          <span class="page-info">Page <%= @payments.current_page %> of <%= @payments.total_pages %></span>
+        </div>
+      </div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <% if current_user.has_role?('admin') %>
+              <th>Merchant</th>
+            <% end %>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Gateway</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @payments.any? %>
+            <% @payments.each do |payment| %>
+              <tr>
+                <td>#<%= payment.id %></td>
+                <% if current_user.has_role?('admin') %>
+                  <td><%= payment.merchant&.company_name || 'N/A' %></td>
+                <% end %>
+                <td><%= payment.customer_name || 'N/A' %></td>
+                <td>$<%= (payment.amount_cents / 100.0).round(2) %></td>
+                <td><%= payment.gateway&.titleize || 'N/A' %></td>
+                <td>
+                  <span class="status-badge <%= payment.status %>">
+                    <%= payment.status.capitalize %>
+                  </span>
+                </td>
+                <td><%= payment.created_at.strftime('%b %d, %Y %I:%M %p') %></td>
+                <td>
+                  <button class="btn-small">View</button>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="<%= current_user.has_role?('admin') ? 8 : 7 %>" style="text-align: center; padding: 40px;">
+                <p>No payments found</p>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      
+      <!-- Pagination -->
+      <div class="pagination">
+        <%= paginate @payments %>
+      </div>
+    </div>
+  </div>
+</div>

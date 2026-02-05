@@ -1,0 +1,113 @@
+<div class="settings-container">
+  <div class="settings-nav">
+    <h3>Settings</h3>
+    <ul>
+      <% if @settings[:role] == 'admin' %>
+        <li><%= link_to "System Overview", "/settings", class: "nav-link" %></li>
+        <li><%= link_to "Merchants", "/settings/merchants", class: "nav-link" %></li>
+        <li><%= link_to "Security", "/settings/security", class: "nav-link" %></li>
+        <li><%= link_to "System Config", "/settings/config", class: "nav-link" %></li>
+      <% else %>
+        <li><%= link_to "General", "/settings", class: "nav-link" %></li>
+        <li><%= link_to "Security", "/settings/security", class: "nav-link" %></li>
+        <li class="active"><%= link_to "Payout Settings", "/settings/payout", class: "nav-link" %></li>
+        <li><%= link_to "Notifications", "/settings/notifications", class: "nav-link" %></li>
+        <li><%= link_to "Bank Accounts", "/settings/bank_accounts", class: "nav-link" %></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="settings-content">
+    <div class="settings-header">
+      <div class="settings-icon">💸</div>
+      <div>
+        <h1>Payout Settings</h1>
+        <p>Configure your payout schedule and preferences</p>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Current Balance</h3>
+      <div class="balance-display">
+        <h2>$<%= (@settings[:balance_cents] / 100.0).round(2) %></h2>
+        <p>Available for payout</p>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Payout Schedule</h3>
+      <div class="form-group">
+        <label>Payout Frequency</label>
+        <select class="form-input">
+          <option value="manual" <%= 'selected' if @settings[:payout_settings]['payout_schedule'] == 'manual' %>>Manual (Request when needed)</option>
+          <option value="daily" <%= 'selected' if @settings[:payout_settings]['payout_schedule'] == 'daily' %>>Daily</option>
+          <option value="weekly" <%= 'selected' if @settings[:payout_settings]['payout_schedule'] == 'weekly' %>>Weekly</option>
+          <option value="monthly" <%= 'selected' if @settings[:payout_settings]['payout_schedule'] == 'monthly' %>>Monthly</option>
+        </select>
+        <p class="help-text">Choose how often you want to receive payouts</p>
+      </div>
+
+      <div class="form-group">
+        <label>Minimum Payout Amount</label>
+        <input type="number" class="form-input" value="<%= (@settings[:payout_settings]['minimum_payout_amount'] || 10000) / 100.0 %>" step="0.01" min="0" />
+        <p class="help-text">Minimum balance required before automatic payout (in USD)</p>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" <%= 'checked' if @settings[:payout_settings]['auto_payout_enabled'] %> />
+          Enable Automatic Payouts
+        </label>
+        <p class="help-text">Automatically process payouts based on your schedule</p>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Payout Method</h3>
+      <div class="form-group">
+        <label>Transfer Type</label>
+        <select class="form-input">
+          <option value="imps" <%= 'selected' if @settings[:payout_settings]['payout_method'] == 'imps' %>>IMPS (Instant - 24x7)</option>
+          <option value="neft" <%= 'selected' if @settings[:payout_settings]['payout_method'] == 'neft' %>>NEFT (2-3 hours - Working hours)</option>
+          <option value="rtgs" <%= 'selected' if @settings[:payout_settings]['payout_method'] == 'rtgs' %>>RTGS (30 min - ₹2 Lakh+)</option>
+        </select>
+        <p class="help-text">Choose your preferred bank transfer method</p>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Primary Bank Account</h3>
+      <% if @settings[:primary_bank_account] %>
+        <div class="bank-account-card">
+          <div class="bank-info">
+            <h4><%= @settings[:primary_bank_account].bank_name %></h4>
+            <p>Account: •••• <%= @settings[:primary_bank_account].account_number.last(4) %></p>
+            <p>Bank Code: <%= @settings[:primary_bank_account].bank_code %></p>
+            <p>Type: <%= @settings[:primary_bank_account].account_type&.titleize %></p>
+            <span class="badge <%= @settings[:primary_bank_account].is_verified ? 'success' : 'warning' %>">
+              <%= @settings[:primary_bank_account].is_verified ? '✓ Verified' : 'Pending Verification' %>
+            </span>
+          </div>
+        </div>
+      <% else %>
+        <div class="empty-state">
+          <p>No primary bank account set</p>
+          <%= link_to "Add Bank Account", "/settings/bank_accounts", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="setting-group">
+      <h3>Quick Actions</h3>
+      <div class="action-buttons">
+        <%= link_to "Request Payout Now", "#", class: "btn btn-primary", data: { confirm: "Request payout of $#{(@settings[:balance_cents] / 100.0).round(2)}?" } %>
+        <%= link_to "View Payout History", "/transactions", class: "btn btn-secondary" %>
+      </div>
+    </div>
+
+    <div class="setting-actions">
+      <button class="btn btn-primary">Save Changes</button>
+      <button class="btn btn-secondary">Cancel</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  amount_cents: 1
+  currency: MyString
+  status: MyString
+  payout_method: MyString
+  bank_account: one
+  merchant: one
+  fee_cents: 1
+  scheduled_at: 2026-02-03 11:38:25
+  processed_at: 2026-02-03 11:38:25
+  completed_at: 2026-02-03 11:38:25
+  failure_reason: MyText
+  metadata: 
+
+two:
+  amount_cents: 1
+  currency: MyString
+  status: MyString
+  payout_method: MyString
+  bank_account: two
+  merchant: two
+  fee_cents: 1
+  scheduled_at: 2026-02-03 11:38:25
+  processed_at: 2026-02-03 11:38:25
+  completed_at: 2026-02-03 11:38:25
+  failure_reason: MyText
+  metadata: 

@@ -1,0 +1,87 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-icon">✏️</div>
+    <div>
+      <h1>Edit Merchant</h1>
+      <p>Update details for <%= @merchant.company_name %></p>
+    </div>
+  </div>
+
+  <div class="settings-content">
+    <%= form_with model: @merchant, local: true do |f| %>
+      <% if @merchant.errors.any? %>
+        <div class="alert alert-danger">
+          <h4><%= pluralize(@merchant.errors.count, "error") %> prohibited this merchant from being saved:</h4>
+          <ul>
+            <% @merchant.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="setting-group">
+        <h3>Login Credentials</h3>
+        <p class="help-text">
+          Login Email: <strong><%= @merchant.user.email %></strong><br>
+          <small>To change the password, the merchant needs to use the "Forgot Password" flow or change it in their settings.</small>
+        </p>
+      </div>
+
+      <div class="setting-group">
+        <h3>Business Information</h3>
+        <div class="form-group">
+          <%= f.label :company_name, "Company Name" %>
+          <%= f.text_field :company_name, class: "form-input", required: true %>
+        </div>
+        <div class="form-group">
+          <%= f.label :name, "Contact Person Name" %>
+          <%= f.text_field :name, class: "form-input", required: true %>
+        </div>
+        <div class="form-group">
+          <%= f.label :email, "Business Email" %>
+          <%= f.email_field :email, class: "form-input", required: true %>
+        </div>
+        <div class="form-group">
+          <%= f.label :phone, "Phone Number" %>
+          <%= f.text_field :phone, class: "form-input" %>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <h3>Business Details</h3>
+        <div class="form-group">
+          <%= f.label :tax_id, "Tax ID / EIN" %>
+          <%= f.text_field :tax_id, class: "form-input" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :business_type %>
+          <%= f.select :business_type, 
+              [['Sole Proprietorship', 'sole_proprietorship'], 
+               ['Partnership', 'partnership'], 
+               ['LLC', 'llc'], 
+               ['Corporation', 'corporation']], 
+              { include_blank: 'Select business type' }, 
+              class: "form-input" %>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <h3>Account Settings</h3>
+        <div class="form-group">
+          <%= f.label :status %>
+          <%= f.select :status, [['Active', 'active'], ['Pending', 'pending'], ['Suspended', 'suspended'], ['Inactive', 'inactive']], {}, class: "form-input" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :currency %>
+          <%= f.select :currency, [['USD', 'USD'], ['EUR', 'EUR'], ['GBP', 'GBP'], ['INR', 'INR']], {}, class: "form-input" %>
+        </div>
+      </div>
+
+      <div class="setting-actions">
+        <%= f.submit "Update Merchant", class: "btn btn-primary" %>
+        <%= link_to "Cancel", merchants_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

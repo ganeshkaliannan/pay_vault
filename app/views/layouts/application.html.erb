@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "PayVault" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="PayVault">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <div class="nav-logo">PV</div>
+          <span class="nav-title">PayVault</span>
+        </div>
+        
+        <div class="nav-menu">
+          <%= link_to "Dashboard", "/", class: "nav-link #{'active' if current_page?('/')}" %>
+          <% if user_signed_in? && current_user.has_role?('admin') %>
+            <%= link_to "Merchants", merchants_path, class: "nav-link #{'active' if request.path.start_with?('/merchants')}" %>
+          <% end %>
+          <% if user_signed_in? && current_user.has_role?('merchant') %>
+            <%= link_to "Beneficiaries", beneficiaries_path, class: "nav-link #{'active' if request.path.start_with?('/beneficiaries')}" %>
+            <%= link_to "Payouts", payouts_path, class: "nav-link #{'active' if request.path.start_with?('/payouts')}" %>
+          <% end %>
+          <%= link_to "Payments", "/payments", class: "nav-link #{'active' if current_page?('/payments')}" %>
+          <%= link_to "Transactions", "/transactions", class: "nav-link #{'active' if current_page?('/transactions')}" %>
+          <%= link_to "Settings", "/settings", class: "nav-link #{'active' if request.path.start_with?('/settings')}" %>
+        </div>
+
+        <div class="nav-user">
+          <% if user_signed_in? %>
+            <div class="user-menu">
+              <span class="user-email"><%= current_user.email %></span>
+              <div class="user-dropdown">
+                <%= link_to "Profile", "#", class: "dropdown-item" %>
+                <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "dropdown-item logout" %>
+              </div>
+            </div>
+          <% else %>
+            <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "nav-link nav-cta" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <%= yield %>
+    </main>
+  </body>
+</html>

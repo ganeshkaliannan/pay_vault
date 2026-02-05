@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  amount_cents: 1
+  currency: MyString
+  status: MyString
+  payment_method: MyString
+  gateway: MyString
+  gateway_transaction_id: MyString
+  description: MyText
+  customer: one
+  merchant: one
+  metadata: 
+  processed_at: 2026-02-03 11:38:20
+
+two:
+  amount_cents: 1
+  currency: MyString
+  status: MyString
+  payment_method: MyString
+  gateway: MyString
+  gateway_transaction_id: MyString
+  description: MyText
+  customer: two
+  merchant: two
+  metadata: 
+  processed_at: 2026-02-03 11:38:20

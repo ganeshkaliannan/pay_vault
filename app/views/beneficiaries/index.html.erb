@@ -1,0 +1,90 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-icon">👥</div>
+    <div>
+      <h1>Beneficiaries</h1>
+      <p>Manage your payout recipients</p>
+    </div>
+    <div style="margin-left: auto;">
+      <%= link_to "Add Beneficiary", new_beneficiary_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <div class="data-table">
+    <div class="table-header">
+      <h2>All Beneficiaries (<%= @beneficiaries.total_count %>)</h2>
+      <div class="table-actions">
+        <span class="page-info">Page <%= @beneficiaries.current_page %> of <%= @beneficiaries.total_pages %></span>
+      </div>
+    </div>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Account Details</th>
+          <th>Bank / IFSC</th>
+          <th>Contact</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @beneficiaries.any? %>
+          <% @beneficiaries.each do |beneficiary| %>
+            <tr>
+              <td>
+                <div style="font-weight: 500; color: #111827;"><%= beneficiary.name %></div>
+                <div style="font-size: 0.85em; color: #6b7280;"><%= beneficiary.account_type.capitalize %></div>
+              </td>
+              <td style="font-family: monospace; letter-spacing: 0.5px;">
+                <%= beneficiary.account_number %>
+              </td>
+              <td>
+                <div><%= beneficiary.bank_name %></div>
+                <code style="background: #f3f4f6; padding: 2px 4px; border-radius: 4px; font-size: 0.85em;"><%= beneficiary.ifsc_code %></code>
+              </td>
+              <td>
+                <% if beneficiary.email.present? %>
+                  <div style="font-size: 0.9em;">✉️ <%= beneficiary.email %></div>
+                <% end %>
+                <% if beneficiary.phone.present? %>
+                  <div style="font-size: 0.9em;">📱 <%= beneficiary.phone %></div>
+                <% end %>
+              </td>
+              <td>
+                <% if beneficiary.status == 'active' %>
+                  <span class="status-badge active">Active</span>
+                <% else %>
+                  <span class="status-badge inactive">Inactive</span>
+                <% end %>
+                
+                <% if beneficiary.is_verified %>
+                  <span class="status-badge completed" style="font-size: 0.7em; margin-left: 4px;">Verified</span>
+                <% else %>
+                  <span class="status-badge pending" style="font-size: 0.7em; margin-left: 4px;">Unverified</span>
+                <% end %>
+              </td>
+              <td>
+                <%= link_to "✏️", edit_beneficiary_path(beneficiary), class: "btn-small", title: "Edit" %>
+                <%= button_to "🗑️", beneficiary_path(beneficiary), method: :delete, data: { turbo_confirm: "Are you sure? Only unused beneficiaries can be deleted. Others will be deactivated." }, class: "btn-small btn-danger", title: "Delete" %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 40px;">
+              <p>No beneficiaries found</p>
+              <%= link_to "Add First Beneficiary", new_beneficiary_path, class: "btn btn-primary" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+    <!-- Pagination -->
+    <div class="pagination">
+      <%= paginate @beneficiaries %>
+    </div>
+  </div>
+</div>

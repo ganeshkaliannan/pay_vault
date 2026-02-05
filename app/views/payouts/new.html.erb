@@ -1,0 +1,73 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-icon">💸</div>
+    <div>
+      <h1>Request Payout</h1>
+      <p>Send funds to your beneficiaries</p>
+    </div>
+  </div>
+
+  <div class="settings-content">
+    <div class="stat-card" style="max-width: 400px; margin-bottom: 2rem;">
+      <h3>Available Balance</h3>
+      <div class="stat-value">$<%= (@merchant.balance_cents / 100.0).round(2) %></div>
+      <div class="stat-change neutral">
+        <%= @merchant.currency %>
+      </div>
+    </div>
+
+    <%= form_with model: @payout, local: true do |f| %>
+      <% if @payout.errors.any? %>
+        <div class="alert alert-danger">
+          <h4><%= pluralize(@payout.errors.count, "error") %> prohibited this payout from being saved:</h4>
+          <ul>
+            <% @payout.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="setting-group">
+        <h3>Transfer Details</h3>
+        
+        <div class="form-group">
+          <%= f.label :beneficiary_id, "Select Beneficiary" %>
+          <%= f.collection_select :beneficiary_id, 
+              @beneficiaries, 
+              :id, 
+              :name, 
+              { prompt: "Choose a recipient..." }, 
+              { class: "form-input", required: true } %>
+          <p class="help-text">
+            Don't see who you need? 
+            <%= link_to "Add new beneficiary", new_beneficiary_path, target: "_blank" %>
+          </p>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :amount, "Amount" %>
+          <%= f.number_field :amount, step: "0.01", min: "1.00", class: "form-input", required: true, placeholder: "0.00" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :payout_method, "Transfer Mode" %>
+          <%= f.select :payout_method, 
+              [['IMPS (Instant)', 'imps'], ['NEFT (National Electronic Funds Transfer)', 'neft'], ['RTGS (Real Time Gross Settlement)', 'rtgs']], 
+              {}, 
+              class: "form-input" %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :description, "Description / Remarks" %>
+          <%= f.text_field :description, class: "form-input", placeholder: "e.g. Invoice #1024" %>
+        </div>
+      </div>
+
+      <div class="setting-actions">
+        <%= f.submit "Process Payout", class: "btn btn-primary", data: { turbo_confirm: "Are you sure? This amount will be deducted from your balance immediately." } %>
+        <%= link_to "Cancel", payouts_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

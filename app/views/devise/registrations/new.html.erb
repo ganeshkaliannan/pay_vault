@@ -1,0 +1,41 @@
+<div class="login-container">
+  <div class="login-header">
+    <div class="login-logo">PV</div>
+    <h1 class="login-title">Create Account</h1>
+    <p class="login-subtitle">Join PayVault payment platform</p>
+  </div>
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div class="form-group">
+      <%= f.label :email, class: "form-label" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-input", placeholder: "Enter your email" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password, class: "form-label" %>
+      <% if @minimum_password_length %>
+        <em class="text-xs text-gray-500 block mb-2">(<%= @minimum_password_length %> characters minimum, must include uppercase, lowercase, number, and special character)</em>
+      <% end %>
+      <%= f.password_field :password, autocomplete: "new-password", class: "form-input", placeholder: "Create a strong password" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password_confirmation, class: "form-label" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-input", placeholder: "Confirm your password" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.submit "Sign Up", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <div class="divider">
+    <span>Already have an account?</span>
+  </div>
+
+  <div class="login-links">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>

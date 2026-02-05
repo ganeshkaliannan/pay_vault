@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  merchant: one
+  name: MyString
+  account_number: MyString
+  ifsc_code: MyString
+  bank_name: MyString
+  branch_name: MyString
+  account_type: MyString
+  email: MyString
+  phone: MyString
+  status: MyString
+  is_verified: false
+  metadata: 
+
+two:
+  merchant: two
+  name: MyString
+  account_number: MyString
+  ifsc_code: MyString
+  bank_name: MyString
+  branch_name: MyString
+  account_type: MyString
+  email: MyString
+  phone: MyString
+  status: MyString
+  is_verified: false
+  metadata: 

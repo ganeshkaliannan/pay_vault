@@ -1,0 +1,76 @@
+<div class="login-container">
+  <div class="login-header">
+    <div class="login-logo">PV</div>
+    <h1 class="login-title">Welcome to PayVault</h1>
+    <p class="login-subtitle">Secure payment gateway platform</p>
+  </div>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <div class="form-group">
+      <%= f.label :email, class: "form-label" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-input", placeholder: "Enter your email" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password, class: "form-label" %>
+      <div class="password-input-container">
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-input", placeholder: "Enter your password", id: "password-field" %>
+        <button type="button" class="password-toggle" onclick="togglePassword()">
+          <svg id="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <svg id="eye-off-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div class="form-group">
+        <label class="flex items-center">
+          <%= f.check_box :remember_me, class: "mr-2" %>
+          <span class="text-sm text-gray-600">Remember me</span>
+        </label>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.submit "Sign In", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <div class="login-links">
+    <%= render "devise/shared/links" %>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const passwordField = document.getElementById('password-field');
+      const eyeIcon = document.getElementById('eye-icon');
+      const eyeOffIcon = document.getElementById('eye-off-icon');
+      
+      if (passwordField && eyeIcon && eyeOffIcon) {
+        if (passwordField.type === 'password') {
+          passwordField.type = 'text';
+          eyeIcon.style.display = 'none';
+          eyeOffIcon.style.display = 'block';
+        } else {
+          passwordField.type = 'password';
+          eyeIcon.style.display = 'block';
+          eyeOffIcon.style.display = 'none';
+        }
+      }
+    }
+    
+    // Initialize password field
+    document.addEventListener('DOMContentLoaded', function() {
+      const passwordField = document.getElementById('password-field');
+      if (passwordField) {
+        passwordField.type = 'password';
+      }
+    });
+  </script>
+</div>

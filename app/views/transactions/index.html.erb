@@ -1,0 +1,77 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-icon">📊</div>
+    <div>
+      <h1>Transactions</h1>
+      <p>Complete transaction history and ledger</p>
+    </div>
+  </div>
+
+  <div class="data-table">
+      <div class="table-header">
+        <h2>All Transactions (<%= @transactions.total_count %>)</h2>
+        <div class="table-actions">
+          <span class="page-info">Page <%= @transactions.current_page %> of <%= @transactions.total_pages %></span>
+        </div>
+      </div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <% if current_user.has_role?('admin') %>
+              <th>Merchant</th>
+            <% end %>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @transactions.any? %>
+            <% @transactions.each do |transaction| %>
+              <tr>
+                <td>#<%= transaction.id %></td>
+                <% if current_user.has_role?('admin') %>
+                  <td><%= transaction.merchant&.company_name || 'N/A' %></td>
+                <% end %>
+                <td>
+                  <span class="badge <%= transaction.transaction_type %>">
+                    <%= transaction.transaction_type.titleize %>
+                  </span>
+                </td>
+                <td class="<%= transaction.transaction_type == 'debit' ? 'negative' : 'positive' %>">
+                  <%= transaction.transaction_type == 'debit' ? '-' : '+' %>$<%= (transaction.amount_cents / 100.0).round(2) %>
+                </td>
+                <td>
+                  <span class="status-badge <%= transaction.status %>">
+                    <%= transaction.status.capitalize %>
+                  </span>
+                </td>
+                <td><%= transaction.description || 'N/A' %></td>
+                <td><%= transaction.created_at.strftime('%b %d, %Y %I:%M %p') %></td>
+                <td>
+                  <button class="btn-small">View</button>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="<%= current_user.has_role?('admin') ? 8 : 7 %>" style="text-align: center; padding: 40px;">
+                <p>No transactions found</p>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      
+      <!-- Pagination -->
+      <div class="pagination">
+        <%= paginate @transactions %>
+      </div>
+    </div>
+  </div>
+</div>
